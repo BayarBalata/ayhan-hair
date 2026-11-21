@@ -49,11 +49,15 @@ const scrollTo = (target, opts = {}) => {
 })();
 
 /* ------------------------------------------------------------------ cursor */
+// Mouse-driven parallax only: on phones a scrolling finger also fires pointermove,
+// which made the 3D tools sway while you scrolled.
 const pointerN = { x: 0, y: 0 };
-addEventListener('pointermove', (e) => {
-  pointerN.x = (e.clientX / innerWidth) * 2 - 1;
-  pointerN.y = (e.clientY / innerHeight) * 2 - 1;
-}, { passive: true });
+if (finePointer) {
+  addEventListener('pointermove', (e) => {
+    pointerN.x = (e.clientX / innerWidth) * 2 - 1;
+    pointerN.y = (e.clientY / innerHeight) * 2 - 1;
+  }, { passive: true });
+}
 
 if (finePointer) {
   const cur = $('.cursor'), dot = $('.cursor__dot'), ring = $('.cursor__ring'), label = $('.cursor__label');
@@ -141,7 +145,7 @@ function measureCut() {
   const span = $('.cut--top');
   const yPx = heroTitle.offsetTop + span.offsetTop + span.offsetHeight * f;
   cutline.style.top = `${yPx}px`;
-  stage?.setCutY(1 - (2 * yPx) / innerHeight);
+  if (stage) stage.setCutY(1 - (2 * yPx) / stage.height);
 }
 
 /* ------------------------------------------------------------- loader */
@@ -541,7 +545,7 @@ function buildScenes() {
     foot: () => footST.progress,
     bookAnchor: () => {
       const r = bookStage.getBoundingClientRect();
-      return { x: ((r.left + r.width / 2) / innerWidth) * 2 - 1, y: 1 - ((r.top + r.height / 2) / innerHeight) * 2 };
+      return { x: ((r.left + r.width / 2) / innerWidth) * 2 - 1, y: 1 - ((r.top + r.height / 2) / stage.height) * 2 };
     },
   });
   if (!stage) heroTL.fromTo('.hero__cutline', { scaleX: 0 }, { scaleX: 1, duration: 0.46, ease: 'none' }, 0.1);

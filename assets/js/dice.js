@@ -204,12 +204,14 @@ export async function createDice(canvas) {
   new IntersectionObserver(([e]) => (inView = e.isIntersecting), { rootMargin: '100px' }).observe(canvas);
 
   const pointer = { x: 0, y: 0, sx: 0, sy: 0 };
-  canvas.parentElement.addEventListener('pointermove', (e) => {
-    const r = canvas.getBoundingClientRect();
-    pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
-    pointer.y = ((e.clientY - r.top) / r.height) * 2 - 1;
-  });
-  canvas.parentElement.addEventListener('pointerleave', () => { pointer.x = 0; pointer.y = 0; });
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches) { // mouse only — no sway while touch-scrolling
+    canvas.parentElement.addEventListener('pointermove', (e) => {
+      const r = canvas.getBoundingClientRect();
+      pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+      pointer.y = ((e.clientY - r.top) / r.height) * 2 - 1;
+    });
+    canvas.parentElement.addEventListener('pointerleave', () => { pointer.x = 0; pointer.y = 0; });
+  }
 
   let dirty = true;
   resize();

@@ -273,7 +273,10 @@ function makeHair(count) {
 /* ----------------------------------------------------------------- stage */
 
 export function createStage(canvas) {
-  const mobile = () => innerWidth < 900 || innerWidth / innerHeight < 0.85;
+  // Measure the canvas itself (100lvh): stable while a phone's URL bar slides in and out.
+  const viewW = () => canvas.clientWidth || innerWidth;
+  const viewH = () => canvas.clientHeight || innerHeight;
+  const mobile = () => viewW() < 900 || viewW() / viewH() < 0.85;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio, mobile() ? 1.5 : 1.75));
@@ -317,9 +320,12 @@ export function createStage(canvas) {
 
   /* ---- view metrics ---- */
   let visW = 1, visH = 1, unit = 1;
+  let lastW = 0, lastH = 0;
   function resize() {
-    const w = innerWidth, h = innerHeight;
-    renderer.setSize(w, h, true); // CSS size follows the visible viewport (mobile URL bar)
+    const w = viewW(), h = viewH();
+    if (w === lastW && h === lastH) return;
+    lastW = w; lastH = h;
+    renderer.setSize(w, h, false); // CSS owns the box; only the drawing buffer follows it
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     visH = 2 * camera.position.z * Math.tan((camera.fov * PI) / 360);
@@ -328,7 +334,7 @@ export function createStage(canvas) {
     if (mobile()) unit *= 1.25;
   }
   resize();
-  addEventListener('resize', resize);
+  new ResizeObserver(resize).observe(canvas);
 
   /* ---- drivers & keyframes ---- */
   const drivers = { hero: () => 0, inter: () => 0, book: () => 0, foot: () => 0 };
@@ -455,7 +461,7 @@ export function createStage(canvas) {
     tmp.copy(cutLocal);
     scissors.localToWorld(tmp);
     tmp.project(camera);
-    cutInfo.x = ((tmp.x + 1) / 2) * innerWidth;
+    cutInfo.x = ((tmp.x + 1) / 2) * viewW();
     cutInfo.active = hp < 0.1 ? 0 : 1;
     cutInfo.full = hp >= 0.56;
 
@@ -497,6 +503,7 @@ export function createStage(canvas) {
     setDrivers(d) { Object.assign(drivers, d); },
     setCutY(ny) { cutY = ny; },
     setPointer(x, y) { pointer.x = x; pointer.y = y; },
+    get height() { return viewH(); },
     onFrame(fn) { onFrame = fn; },
     intro(duration = 1.8) {
       return new Promise((res) => {

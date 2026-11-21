@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en" class="is-loading">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ayhan — Hair</title>
+  <meta name="description" content="Ayhan — barber and hair artist. Precision cuts, skin fades, beard sculpting and straight-razor shaves. By appointment.">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:title" content="Ayhan — Hair">
+  <meta property="og:description" content="Black. White. Sharp. Barber and hair artist — by appointment.">
+  <meta property="og:image" content="assets/img/hero-portrait.webp">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230a0a0a'/%3E%3Ccircle cx='18' cy='20' r='8' fill='none' stroke='%23e9e4da' stroke-width='4'/%3E%3Ccircle cx='18' cy='44' r='8' fill='none' stroke='%23e9e4da' stroke-width='4'/%3E%3Cpath d='M24 25 58 44M24 39 58 20' stroke='%23e9e4da' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='34' cy='32' r='2.5' fill='%23b3141c'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Lalezar&family=Nunito:wght@900&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/img/hero-portrait.webp">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <script type="importmap">
+    { "imports": {
+        "three": "./assets/vendor/three/three.module.js",
+        "three/addons/": "./assets/vendor/three/addons/"
+    } }
+  </script>
+</head>
+<body>
+
+  <!-- ───────────── Overlays ───────────── -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__ring">
+      <svg class="cursor__scissors" viewBox="-64 -34 128 68">
+        <g class="sc-a"><circle cx="-38" cy="-14" r="11"/><path d="M-28-10 0-2 60 1 26 6 0 6-27-5Z"/></g>
+        <g class="sc-b"><circle cx="-38" cy="14" r="11"/><path d="M-28 10 0 2 60-1 26-6 0-6-27 5Z"/></g>
+        <circle class="sc-pin" r="3"/>
+      </svg>
+      <span class="cursor__label">View</span>
+    </div>
+    <div class="cursor__dot"></div>
+  </div>
+
+  <!-- ───────────── Preloader ───────────── -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__half loader__half--top"></div>
+    <div class="loader__half loader__half--bottom"></div>
+    <div class="loader__inner">
+      <div class="loader__brand"><span>Ayhan</span><span>Hair — Barber</span></div>
+      <div class="loader__track">
+        <div class="loader__dash"></div>
+        <div class="loader__cut"></div>
+        <svg class="loader__scissors" viewBox="-64 -34 128 68">
+          <g class="sc-a"><circle cx="-38" cy="-14" r="11"/><path d="M-28-10 0-2 60 1 26 6 0 6-27-5Z"/></g>
+          <g class="sc-b"><circle cx="-38" cy="14" r="11"/><path d="M-28 10 0 2 60-1 26-6 0-6-27 5Z"/></g>
+          <circle class="sc-pin" r="3"/>
+        </svg>
+      </div>
+      <div class="loader__count"><span>000</span></div>
+    </div>
+  </div>
+
+  <!-- Fixed WebGL stage: chrome scissors, comb and straight razor -->
+  <canvas class="stage" id="stage" aria-hidden="true"></canvas>
+
+  <!-- ───────────── Navigation ───────────── -->
+  <header class="nav">
+    <a class="nav__logo" href="#top" data-scroll>Ayhan<sup>®</sup></a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="#about" data-scroll><span>About</span></a>
+      <a href="#services" data-scroll><span>Services</span></a>
+      <a href="#lookbook" data-scroll><span>Lookbook</span></a>
+      <a href="#ink" data-scroll><span>Ink</span></a>
+    </nav>
+    <a class="nav__cta magnetic" href="#book" data-scroll><span>Book the chair</span></a>
+  </header>
+
+  <main>
+    <!-- ───────────── HERO ───────────── -->
+    <section class="hero" id="top">
+      <figure class="hero__img">
+        <img src="assets/img/hero-portrait.webp" alt="Black and white portrait of a man with a sharp, slicked hairstyle in a dark studio" fetchpriority="high">
+      </figure>
+
+      <h1 class="hero__title" aria-label="Ayhan">
+        <span class="cut cut--top" aria-hidden="true"><span>A</span><span>Y</span><span>H</span><span>A</span><span>N</span></span>
+        <span class="cut cut--bottom" aria-hidden="true"><span>A</span><span>Y</span><span>H</span><span>A</span><span>N</span></span>
+      </h1>
+      <div class="hero__cutline" aria-hidden="true"></div>
+
+      <div class="hero__fa" lang="fa" aria-hidden="true">آیهان</div>
+
+      <p class="hero__meta hero__meta--tl"><span class="mono">(Barber)</span><br>Hair artist.<br>Sharp hands, dark taste.</p>
+      <p class="hero__meta hero__meta--tr mono">Black / White / Sharp<br><span class="dim">By appointment only</span></p>
+      <div class="hero__meta hero__meta--bl mono">
+        <span class="scroll-hint"><i></i>Scroll to make the cut</span>
+      </div>
+      <p class="hero__meta hero__meta--br mono">N°01 — <span class="dim">Cut · Fade · Shave</span></p>
+    </section>
+
+    <!-- ───────────── MANIFESTO / ABOUT ───────────── -->
+    <section class="about" id="about">
+      <p class="eyebrow mono"><span>(01)</span> The barber</p>
+      <h2 class="manifesto" data-words>
+        Every cut is a <em>risk.</em> I take it with steady hands, honest steel and zero shortcuts — so you leave the chair as the <em>sharpest</em> version of yourself.
+      </h2>
+
+      <div class="about__grid">
+        <figure class="about__img reveal-img" data-cursor="view">
+          <img src="assets/img/razor-dark.webp" alt="A straight razor resting in a dimly lit barbershop" loading="lazy">
+        </figure>
+        <div class="about__copy">
+          <p class="lead">Ayhan treats hair the way he treats ink — something you carry with you. Clean geometry, soft transitions, a finish that still looks right three weeks later.</p>
+          <ul class="about__tags mono">
+            <li>Scissor work</li><li>Skin fades</li><li>Beard sculpting</li><li>Straight razor</li><li>Hair design</li>
+          </ul>
+          <a class="link-strike mono" href="https://www.instagram.com/ayhanabdollahiiiii/" target="_blank" rel="noopener"><span>@ayhanabdollahiiiii</span> ↗</a>
+        </div>
+        <figure class="about__img about__img--small reveal-img" data-cursor="view">
+          <img src="assets/img/shop-dark.webp" alt="A barber at work in a dark, atmospheric barbershop" loading="lazy">
+        </figure>
+      </div>
+    </section>
+
+    <!-- ───────────── MARQUEE / TOOLS INTERLUDE ───────────── -->
+    <section class="interlude" aria-label="Cut, fade, shave, sculpt">
+      <div class="marquee marquee--solid" data-dir="1">
+        <div class="marquee__inner">
+          <span>Cut</span><i class="sc-ico"></i><span>Fade</span><i class="sc-ico"></i><span>Shave</span><i class="sc-ico"></i><span>Sculpt</span><i class="sc-ico"></i><span>Design</span><i class="sc-ico"></i>
+        </div>
+      </div>
+      <div class="marquee marquee--outline" data-dir="-1">
+        <div class="marquee__inner">
+          <span>Sharp</span><i class="sc-ico"></i><span>Clean</span><i class="sc-ico"></i><span>Dark</span><i class="sc-ico"></i><span>Precise</span><i class="sc-ico"></i><span>Yours</span><i class="sc-ico"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- snip divider -->
+    <div class="snip" aria-hidden="true"><div class="snip__dashes"></div><svg class="snip__scissors" viewBox="-64 -34 128 68"><g class="sc-a"><circle cx="-38" cy="-14" r="11"/><path d="M-28-10 0-2 60 1 26 6 0 6-27-5Z"/></g><g class="sc-b"><circle cx="-38" cy="14" r="11"/><path d="M-28 10 0 2 60-1 26-6 0-6-27 5Z"/></g><circle class="sc-pin" r="3"/></svg></div>
+
+    <!-- ───────────── SERVICES ───────────── -->
+    <section class="services" id="services">
+      <header class="section-head">
+        <p class="eyebrow mono"><span>(02)</span> Services</p>
+        <h2 class="display">The <em>menu</em></h2>
+        <p class="section-head__note">Every service starts with a conversation. Durations are a guide — your hair sets the pace.</p>
+      </header>
+
+      <ol class="services__list">
+        <li class="service" data-img="assets/img/cut-scissors.webp">
+          <span class="service__no mono">01</span>
+          <h3 class="service__name">Signature cut</h3>
+          <p class="service__desc">Consultation, scissor-over-comb and clipper work, wash and finish.</p>
+          <span class="service__time mono">60 min</span>
+        </li>
+        <li class="service" data-img="assets/img/fade-pomp.webp">
+          <span class="service__no mono">02</span>
+          <h3 class="service__name">Skin fade</h3>
+          <p class="service__desc">From zero to blend — seamless gradients and razor-sharp edges.</p>
+          <span class="service__time mono">45 min</span>
+        </li>
+        <li class="service" data-img="assets/img/beard-brush.webp">
+          <span class="service__no mono">03</span>
+          <h3 class="service__name">Beard sculpt</h3>
+          <p class="service__desc">Shape, line-up and a hot towel to close it out.</p>
+          <span class="service__time mono">30 min</span>
+        </li>
+        <li class="service" data-img="assets/img/hot-shave.webp">
+          <span class="service__no mono">04</span>
+          <h3 class="service__name">Straight razor</h3>
+          <p class="service__desc">Hot towels, warm lather, one blade. The old ritual, done right.</p>
+          <span class="service__time mono">40 min</span>
+        </li>
+        <li class="service" data-img="assets/img/razor-lineup.webp">
+          <span class="service__no mono">05</span>
+          <h3 class="service__name">Hair design</h3>
+          <p class="service__desc">Line-ups, parts and freehand razor details.</p>
+          <span class="service__time mono">30 min</span>
+        </li>
+        <li class="service" data-img="assets/img/ritual.webp">
+          <span class="service__no mono">06</span>
+          <h3 class="service__name">The full ritual</h3>
+          <p class="service__desc">Cut, beard, razor shave and treatment. Clear your afternoon.</p>
+          <span class="service__time mono">90 min</span>
+        </li>
+      </ol>
+      <div class="services__preview" aria-hidden="true"><div class="services__preview-inner"></div></div>
+    </section>
+
+    <!-- ───────────── LOOKBOOK (horizontal) ───────────── -->
+    <section class="lookbook" id="lookbook">
+      <div class="lookbook__pin">
+        <div class="lookbook__track">
+          <header class="lookbook__head">
+            <p class="eyebrow mono"><span>(03)</span> Lookbook</p>
+            <h2 class="display">Black.<br><em>White.</em><br>Sharp.</h2>
+            <p class="lookbook__hint mono">Keep scrolling <span>→</span></p>
+          </header>
+          <figure class="look look--tall" data-cursor="view"><div class="look__frame"><img src="assets/img/model-turtleneck.webp" alt="Man in a black turtleneck with a short textured quiff" loading="lazy"></div><figcaption class="mono"><span>01</span> Textured quiff</figcaption></figure>
+          <figure class="look look--wide look--low" data-cursor="view"><div class="look__frame"><img src="assets/img/beard-scissors.webp" alt="Barber trimming a beard with scissors" loading="lazy"></div><figcaption class="mono"><span>02</span> Beard detail</figcaption></figure>
+          <figure class="look" data-cursor="view"><div class="look__frame"><img src="assets/img/model-quiff.webp" alt="Man with a combed-over pompadour and full beard" loading="lazy"></div><figcaption class="mono"><span>03</span> Hard part</figcaption></figure>
+          <figure class="look look--tall look--high" data-cursor="view"><div class="look__frame"><img src="assets/img/model-profile.webp" alt="Profile of a young man with a short taper" loading="lazy"></div><figcaption class="mono"><span>04</span> Classic taper</figcaption></figure>
+          <figure class="look look--wide" data-cursor="view"><div class="look__frame"><img src="assets/img/razor-work.webp" alt="Barber detailing a fade with a razor" loading="lazy"></div><figcaption class="mono"><span>05</span> Razor work</figcaption></figure>
+          <figure class="look look--low" data-cursor="view"><div class="look__frame"><img src="assets/img/model-curls.webp" alt="Side profile of a man with natural curls" loading="lazy"></div><figcaption class="mono"><span>06</span> Natural curls</figcaption></figure>
+          <figure class="look look--tall" data-cursor="view"><div class="look__frame"><img src="assets/img/model-hoodie.webp" alt="Man in a hoodie with a bleached textured top" loading="lazy"></div><figcaption class="mono"><span>07</span> Bleached crop</figcaption></figure>
+          <figure class="look look--high" data-cursor="view"><div class="look__frame"><img src="assets/img/model-braids.webp" alt="Man with braided hair leaning against a textured wall" loading="lazy"></div><figcaption class="mono"><span>08</span> Braids &amp; fade</figcaption></figure>
+          <figure class="look look--wide look--low" data-cursor="view"><div class="look__frame"><img src="assets/img/moody-beard.webp" alt="Moody portrait of a bearded man in shadow" loading="lazy"></div><figcaption class="mono"><span>09</span> Shadow fade</figcaption></figure>
+          <figure class="look look--tall" data-cursor="view"><div class="look__frame"><img src="assets/img/model-blond.webp" alt="Man looking down with a platinum swept-back cut" loading="lazy"></div><figcaption class="mono"><span>10</span> Platinum sweep</figcaption></figure>
+          <div class="look look--end">
+            <p class="mono">More on</p>
+            <a class="link-strike display-sm" href="https://www.instagram.com/ayhanabdollahiiiii/" target="_blank" rel="noopener"><span>Instagram</span> ↗</a>
+          </div>
+        </div>
+        <div class="lookbook__progress" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
+
+    <!-- ───────────── INK ───────────── -->
+    <section class="ink" id="ink">
+      <header class="section-head section-head--ink">
+        <p class="eyebrow mono"><span>(04)</span> Ink</p>
+        <h2 class="display">Written <em>on skin</em></h2>
+        <p class="section-head__note">The marks Ayhan carries — redrawn in the dark. Stencil first, then the needle.</p>
+      </header>
+
+      <!-- 01 — RISK dice -->
+      <article class="tattoo tattoo--risk">
+        <div class="tattoo__art flash">
+          <canvas class="dice-canvas" aria-label="Four letter dice land spelling RISK, then roll over to spell RICH" role="img"></canvas>
+          <span class="flash__mark mono">Flash N°01</span>
+        </div>
+        <div class="tattoo__info">
+          <span class="tattoo__no mono">01 / 04</span>
+          <h3 class="tattoo__title risk-title" aria-label="Risk — roll again — rich"><span>R</span><span>I</span><span class="roll"><span>S</span><span>C</span></span><span class="roll"><span>K</span><span>H</span></span></h3>
+          <p>Four dice that read <b>RISK</b>. Let them roll once more and they read <b>RICH</b>. Every cut is a roll of the dice — he takes it with steady hands.</p>
+          <span class="tattoo__loc mono">Forearm · blackwork</span>
+        </div>
+      </article>
+
+      <!-- 02 — The stairs -->
+      <article class="tattoo tattoo--stairs tattoo--flip">
+        <div class="tattoo__art flash">
+          <svg class="tattoo-svg stairs chair" viewBox="0 0 420 580" role="img" aria-label="Line drawing of a ladder-back chair">
+            <g class="ink-group" filter="url(#ink-rough)" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-6 210 290)">
+              <!-- back legs (behind the seat) -->
+              <path class="draw w-mid" d="M165 300 L167 470"/>
+              <path class="draw w-bold" d="M295 282 L297 452"/>
+              <!-- back posts with finials -->
+              <path class="draw w-bold" d="M140 40 L165 300"/>
+              <path class="draw w-bold" d="M272 22 L295 282"/>
+              <path class="draw w-bold" d="M136 26 L140 40 M268 8 L272 22"/>
+              <!-- ladder back: rungs -->
+              <path class="draw w-tread" d="M145.5 66.0 L271.3 48.0"/>
+              <path class="draw w-tread" d="M147.1 82.1 L272.7 64.1"/>
+              <path class="draw w-tread" d="M148.6 98.2 L274.2 80.2"/>
+              <path class="draw w-tread" d="M150.2 114.4 L275.6 96.4"/>
+              <path class="draw w-tread" d="M151.7 130.5 L277.0 112.5"/>
+              <path class="draw w-tread" d="M153.2 146.6 L278.4 128.6"/>
+              <path class="draw w-tread" d="M154.8 162.7 L279.9 144.7"/>
+              <path class="draw w-tread" d="M156.3 178.8 L281.3 160.8"/>
+              <path class="draw w-tread" d="M157.9 195.0 L282.7 177.0"/>
+              <path class="draw w-tread" d="M159.4 211.1 L284.1 193.1"/>
+              <path class="draw w-tread" d="M161.0 227.2 L285.6 209.2"/>
+              <path class="draw w-tread" d="M162.6 243.3 L287.0 225.3"/>
+              <path class="draw w-thin" d="M146.5 72.0 L270.3 54.0 M148.1 88.1 L271.7 70.1 M149.6 104.2 L273.2 86.2 M151.2 120.4 L274.6 102.4 M152.7 136.5 L276.0 118.5 M154.2 152.6 L277.4 134.6 M155.8 168.7 L278.9 150.7 M157.3 184.8 L280.3 166.8 M158.9 201.0 L281.7 183.0 M160.4 217.1 L283.1 199.1 M162.0 233.2 L284.6 215.2 M163.6 249.3 L286.0 231.3"/>
+              <!-- seat -->
+              <path class="draw w-bold" d="M165 300 L295 282"/>
+              <path class="draw w-bold" d="M110 350 L240 332"/>
+              <path class="draw w-bold" d="M110 350 L165 300"/>
+              <path class="draw w-bold" d="M240 332 L295 282"/>
+              <path class="draw w-mid" d="M110 361 L240 343 L295 293"/>
+              <path class="draw w-thin" d="M154.0 310.0 L284.0 292.0 M143.0 320.0 L273.0 302.0 M132.0 330.0 L262.0 312.0 M121.0 340.0 L251.0 322.0"/>
+              <!-- front legs -->
+              <path class="draw w-bold" d="M110 350 L113 520"/>
+              <path class="draw w-bold" d="M240 332 L243 502"/>
+              <!-- stretchers -->
+              <path class="draw w-mid" d="M112 455 L242 437"/>
+              <path class="draw w-mid" d="M112 470 L166 420"/>
+              <path class="draw w-mid" d="M242 437 L296 387"/>
+              <path class="draw w-thin" d="M241 352 L296 430"/>
+            </g>
+          </svg>
+          <span class="flash__mark mono">Flash N°02</span>
+        </div>
+        <div class="tattoo__info">
+          <span class="tattoo__no mono">02 / 04</span>
+          <h3 class="tattoo__title">The chair</h3>
+          <p>A ladder-back chair in heavy line and fine hatching. For a barber it’s everything — where every story starts and every cut gets made.</p>
+          <span class="tattoo__loc mono">Forearm · fine line</span>
+        </div>
+      </article>
+
+      <!-- 03 — trust -->
+      <article class="tattoo tattoo--trust">
+        <div class="tattoo__art flash">
+          <svg class="tattoo-svg trust" viewBox="0 0 640 300" role="img" aria-label="The word trust, struck through with a red line">
+            <g transform="rotate(-4 320 150)">
+              <text class="trust__word" x="320" y="190" text-anchor="middle" filter="url(#ink-rough)"><tspan>t</tspan><tspan>r</tspan><tspan>u</tspan><tspan>s</tspan><tspan>t</tspan></text>
+              <path class="trust__strike" d="M58 150 C 200 146, 420 147, 590 143" pathLength="1" filter="url(#ink-rough-red)"/>
+            </g>
+          </svg>
+          <span class="flash__mark mono">Flash N°03</span>
+        </div>
+        <div class="tattoo__info">
+          <span class="tattoo__no mono">03 / 04</span>
+          <h3 class="tattoo__title">trust</h3>
+          <p>Typewritten, then crossed out in red. Not given — earned. One clean line, one honest cut at a time.</p>
+          <span class="tattoo__loc mono">Hand · black &amp; red</span>
+        </div>
+      </article>
+
+      <!-- 04 — quote -->
+      <article class="tattoo tattoo--quote">
+        <div class="quote-pin">
+          <span class="tattoo__no mono">04 / 04 — Forearm script</span>
+          <svg class="tattoo-svg quote" viewBox="0 0 1200 470" role="img" aria-label="My life is more than my body and if i could i would tattoo it">
+            <defs>
+              <path id="q-line-1" d="M30 190 Q 600 118 1170 170"/>
+              <path id="q-line-2" d="M30 375 Q 600 300 1170 352"/>
+              <mask id="q-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="470">
+                <path class="q-mask-line" d="M30 190 Q 600 118 1170 170" pathLength="1"/>
+                <path class="q-mask-line" d="M30 375 Q 600 300 1170 352" pathLength="1"/>
+              </mask>
+            </defs>
+            <g class="q-stencil">
+              <text><textPath href="#q-line-1" startOffset="50%" text-anchor="middle">My life is more than my body</textPath></text>
+              <text><textPath href="#q-line-2" startOffset="50%" text-anchor="middle">and if i could i would tattoo it</textPath></text>
+            </g>
+            <g class="q-ink" mask="url(#q-mask)" filter="url(#ink-rough)">
+              <text><textPath href="#q-line-1" startOffset="50%" text-anchor="middle">My life is more than my body</textPath></text>
+              <text><textPath href="#q-line-2" startOffset="50%" text-anchor="middle">and if i could i would tattoo it</textPath></text>
+            </g>
+            <g class="q-needle"><circle r="16" class="q-needle__glow"/><circle r="4.5" class="q-needle__tip"/></g>
+          </svg>
+          <p class="quote-pin__cap mono">“My life is more than my body — and if I could, I would tattoo it.”</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- snip divider -->
+    <div class="snip" aria-hidden="true"><div class="snip__dashes"></div><svg class="snip__scissors" viewBox="-64 -34 128 68"><g class="sc-a"><circle cx="-38" cy="-14" r="11"/><path d="M-28-10 0-2 60 1 26 6 0 6-27-5Z"/></g><g class="sc-b"><circle cx="-38" cy="14" r="11"/><path d="M-28 10 0 2 60-1 26-6 0-6-27 5Z"/></g><circle class="sc-pin" r="3"/></svg></div>
+
+    <!-- ───────────── BOOK ───────────── -->
+    <section class="book" id="book">
+      <div class="book__stage" aria-hidden="true">
+        <span class="book__label mono">The razor — 1 blade, 0 shortcuts</span>
+      </div>
+      <div class="book__copy">
+        <p class="eyebrow mono"><span>(05)</span> Book the chair</p>
+        <h2 class="book__title">Take the <span class="strike-red">risk.</span><br><em>Book</em> the chair.</h2>
+        <p class="lead">Appointments only. Send a DM with the look you’re after — a photo helps — and Ayhan will reply with the next free slot.</p>
+        <div class="book__actions">
+          <a class="btn magnetic" href="https://www.instagram.com/ayhanabdollahiiiii/" target="_blank" rel="noopener">
+            <span class="btn__fill"></span><span class="btn__text">DM on Instagram ↗</span>
+          </a>
+        </div>
+        <!--
+          Add real details here when available, e.g.
+          <dl class="book__info mono"><div><dt>Studio</dt><dd>Street, City</dd></div><div><dt>Hours</dt><dd>Sat–Thu 11:00–21:00</dd></div><div><dt>Phone</dt><dd><a href="tel:+000">+00 000 000</a></dd></div></dl>
+        -->
+      </div>
+    </section>
+  </main>
+
+  <!-- ───────────── FOOTER ───────────── -->
+  <footer class="footer">
+    <div class="footer__big" aria-hidden="true">
+      <span class="footer__en">Ayhan</span>
+      <span class="footer__fa" lang="fa">آیهان</span>
+    </div>
+    <div class="footer__row mono">
+      <span>© <span class="year">2026</span> Ayhan — Hair</span>
+      <a class="link-strike" href="https://www.instagram.com/ayhanabdollahiiiii/" target="_blank" rel="noopener"><span>Instagram</span> ↗</a>
+      <a class="link-strike" href="CREDITS.md" target="_blank" rel="noopener"><span>Photo credits — Unsplash</span></a>
+      <button class="to-top link-strike" type="button"><span>Back to top</span> ↑</button>
+    </div>
+  </footer>
+
+  <!-- Shared SVG filters (ink texture) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="ink-rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="ink-rough-red" x="-5%" y="-40%" width="110%" height="180%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" seed="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script src="assets/vendor/lenis.min.js"></script>
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

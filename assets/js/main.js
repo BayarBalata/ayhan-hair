@@ -2,8 +2,8 @@
    AYHAN — HAIR · interaction & scroll choreography
    GSAP + ScrollTrigger + Lenis, two Three.js scenes (stage.js, dice.js)
    ========================================================================== */
-import { createStage } from './stage.js';
-import { createDice, rollAt } from './dice.js';
+import { createStage } from './stage.js?v=20261121c';
+import { createDice, rollAt } from './dice.js?v=20261121c';
 
 const { gsap, ScrollTrigger } = window;
 gsap.registerPlugin(ScrollTrigger);
@@ -19,8 +19,10 @@ const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
 /* ------------------------------------------------------------ smooth scroll */
+// Smooth wheel scrolling for mouse/trackpad only. Phones keep native touch scrolling,
+// synced to the animations with ScrollTrigger.normalizeScroll (enabled after the loader).
 let lenis = null;
-if (!reduceMotion && window.Lenis) {
+if (!reduceMotion && finePointer && window.Lenis) {
   lenis = new window.Lenis({ lerp: 0.085, wheelMultiplier: 0.95, touchMultiplier: 1.4 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
@@ -566,6 +568,9 @@ const boot = async () => {
   if (!reduceMotion) heroIntro();
   else stage?.intro(0.01);
   lenis?.start();
+  // Phones scroll on a separate thread; without this, pinned sections and the fixed
+  // 3D layer lag a frame behind the finger and visibly shake.
+  if (!finePointer && !reduceMotion) ScrollTrigger.normalizeScroll(true);
 };
 boot();
 
